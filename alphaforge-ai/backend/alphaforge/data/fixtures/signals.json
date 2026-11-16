@@ -1,0 +1,9 @@
+{
+ "schema_version": "1.0",
+ "provenance": {
+  "kind": "empty",
+  "generated_at": "2026-11-14",
+  "description": "No signals ingested yet. The monitoring pipeline writes signals here (local) or to DynamoDB (AWS)."
+ },
+ "signals": []
+}

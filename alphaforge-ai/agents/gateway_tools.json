@@ -1,0 +1,336 @@
+[
+ {
+  "name": "get_profile_summary",
+  "description": "The user's fictional investor profile, current weights, caps and the assumptions behind them.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    }
+   },
+   "required": [
+    "context_key"
+   ]
+  }
+ },
+ {
+  "name": "get_profile_features",
+  "description": "How the app reads the profile: risk capacity, horizon class, loss and stress tolerances, needs (income, quality, ESG), speculation aversion and the component weights of the fit score with the reason for each adjustment.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    }
+   },
+   "required": [
+    "context_key"
+   ]
+  }
+ },
+ {
+  "name": "get_asset_features",
+  "description": "Computed features per asset (CAD base): returns 1M-3Y, volatility, drawdowns, Sharpe/Sortino, beta, RSI, moving averages, MACD, ATR, liquidity, market cap, dividends, fundamentals (SEC XBRL), factor exposures, GARCH forecast, regime probability, news and insider features, with definitions and reasons for missing values.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    },
+    "tickers": {
+     "type": "string",
+     "description": "Comma-separated tickers"
+    },
+    "groups": {
+     "type": "string",
+     "description": "Comma-separated groups: returns, risk, tail, risk_adjusted, relative, technical, liquidity, size_income, fundamentals, factors, forecast, regime, news, insider, earnings (default: the main ones)"
+    }
+   },
+   "required": [
+    "context_key",
+    "tickers"
+   ]
+  }
+ },
+ {
+  "name": "get_news",
+  "description": "Dated filings (SEC EDGAR), central-bank releases, policy-rate decisions and headlines from allow-listed outlets, with publisher, link, event type, materiality and sentiment. Use it to explain answers with sources.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    },
+    "tickers": {
+     "type": "string",
+     "description": "Comma-separated tickers; omit for market-wide items"
+    },
+    "days": {
+     "type": "integer",
+     "description": "Look-back in days from the end date (default 30)"
+    },
+    "start": {
+     "type": "string",
+     "description": "Start date YYYY-MM-DD (overrides days)"
+    },
+    "end": {
+     "type": "string",
+     "description": "End date YYYY-MM-DD (default: data as-of date)"
+    },
+    "kinds": {
+     "type": "string",
+     "description": "Comma-separated: news, filing, macro, official"
+    }
+   },
+   "required": [
+    "context_key"
+   ]
+  }
+ },
+ {
+  "name": "explain_price_move",
+  "description": "Unusual daily moves of one asset (3+ standard deviations) with the filings, articles and policy decisions published around each date. Use for 'why did X fall/rise'.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    },
+    "ticker": {
+     "type": "string",
+     "description": "One ticker"
+    },
+    "start": {
+     "type": "string",
+     "description": "Start date YYYY-MM-DD (optional)"
+    },
+    "end": {
+     "type": "string",
+     "description": "End date YYYY-MM-DD (optional)"
+    }
+   },
+   "required": [
+    "context_key",
+    "ticker"
+   ]
+  }
+ },
+ {
+  "name": "get_market_regime",
+  "description": "Current market regime (stress, correction, volatile, calm uptrend, mixed) from SPY and XIU.TO trend, drawdown and regime probability, plus policy rates and yield curves, with the rules used.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    }
+   },
+   "required": [
+    "context_key"
+   ]
+  }
+ },
+ {
+  "name": "get_asset_metrics",
+  "description": "Historical risk/return metrics (CAD base) for assets, with the data period and provenance. Use for any number you state about an asset.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    },
+    "tickers": {
+     "type": "string",
+     "description": "Comma-separated tickers, e.g. 'TSLA,SPY'"
+    },
+    "window": {
+     "type": "string",
+     "description": "Metrics window such as '3y' or '5y'. Omit for the default."
+    }
+   },
+   "required": [
+    "context_key",
+    "tickers"
+   ]
+  }
+ },
+ {
+  "name": "score_assets",
+  "description": "Profile-fit ranking (0-100) of the asset universe, best first, with verdict, status (ok, caution, cap_reached, over_cap, excluded), rank stability under perturbed weights, top driver and main drag.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    },
+    "top_n": {
+     "type": "integer",
+     "description": "Number of results (default 10)"
+    },
+    "include_excluded": {
+     "type": "boolean",
+     "description": "Include assets excluded by the user's preferences"
+    },
+    "window": {
+     "type": "string",
+     "description": "Metrics window such as '3y' or '5y'. Omit for the default."
+    }
+   },
+   "required": [
+    "context_key"
+   ]
+  }
+ },
+ {
+  "name": "explain_asset_fit",
+  "description": "Breakdown of one asset's fit score: each component's score, weight, explanation and evidence, gates and drivers.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    },
+    "ticker": {
+     "type": "string",
+     "description": "One ticker"
+    },
+    "window": {
+     "type": "string",
+     "description": "Metrics window such as '3y' or '5y'. Omit for the default."
+    }
+   },
+   "required": [
+    "context_key",
+    "ticker"
+   ]
+  }
+ },
+ {
+  "name": "check_constraints",
+  "description": "Governance check of a proposed fictional position against the user's caps, ESG screens, risk limits and horizon. Returns status (aligned, review, conflict), flags, before/after statistics and alternatives. Call it for ANY request to add or increase a position.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    },
+    "ticker": {
+     "type": "string",
+     "description": "Ticker to add"
+    },
+    "weight": {
+     "type": "number",
+     "description": "Share of the portfolio as a decimal, 0.3 = 30%"
+    },
+    "window": {
+     "type": "string",
+     "description": "Metrics window such as '3y' or '5y'. Omit for the default."
+    }
+   },
+   "required": [
+    "context_key",
+    "ticker",
+    "weight"
+   ]
+  }
+ },
+ {
+  "name": "get_portfolio_radar",
+  "description": "Nine-axis portfolio profile (diversification, risk, geography, USD exposure, defensiveness, growth, ESG, income, event exposure) vs the target for the profile.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    },
+    "window": {
+     "type": "string",
+     "description": "Metrics window such as '3y' or '5y'. Omit for the default."
+    }
+   },
+   "required": [
+    "context_key"
+   ]
+  }
+ },
+ {
+  "name": "get_suggestions",
+  "description": "Rule-based suggestions from portfolio gaps and constraint flags, with candidate assets and what-if impacts, plus top picks.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    },
+    "window": {
+     "type": "string",
+     "description": "Metrics window such as '3y' or '5y'. Omit for the default."
+    }
+   },
+   "required": [
+    "context_key"
+   ]
+  }
+ },
+ {
+  "name": "run_stress",
+  "description": "Replay a historical scenario on the user's fictional portfolio; reports coverage and holdings without data.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    },
+    "scenario": {
+     "type": "string",
+     "description": "Scenario id, default '2022_rates_shock'"
+    },
+    "window": {
+     "type": "string",
+     "description": "Metrics window such as '3y' or '5y'. Omit for the default."
+    }
+   },
+   "required": [
+    "context_key"
+   ]
+  }
+ },
+ {
+  "name": "get_signals",
+  "description": "Recent enriched signals (world events, official statements, filings, posts) touching tickers, with source URLs, severity and sentiment.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "context_key": {
+     "type": "string",
+     "description": "Session key given in the user message. Pass it unchanged."
+    },
+    "tickers": {
+     "type": "string",
+     "description": "Comma-separated tickers; omit for all"
+    },
+    "days": {
+     "type": "integer",
+     "description": "Look-back in days (default 14, max 90)"
+    }
+   },
+   "required": [
+    "context_key"
+   ]
+  }
+ }
+]

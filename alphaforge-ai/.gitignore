@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+backend/.localdata/
+
+# Node
+node_modules/
+frontend/dist/
+
+# Build output
+dist/
+data_pipeline/out/
+
+# Local env files
+.env
+.env.*
+!.env.example

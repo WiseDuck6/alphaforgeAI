@@ -1,0 +1,16 @@
+[project]
+name = "alphaforge"
+version = "0.1.0"
+description = "AlphaForge AI backend: profile-fit scoring, portfolio radar, suggestions, governance and API (simulation only)"
+requires-python = ">=3.12"
+# Runtime has no third-party dependencies. boto3 is provided by the AWS Lambda
+# Python runtime and is only imported on AWS code paths.
+dependencies = []
+
+[project.optional-dependencies]
+aws = ["boto3>=1.44"]  # InvokeHarness with inline tools
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

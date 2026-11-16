@@ -1,0 +1,26 @@
+﻿# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+**/.localdata/
+
+# Node
+node_modules/
+**/dist/
+
+# Build output
+alphaforge-ai/data_pipeline/out/
+
+# Local env files and secrets
+.env
+.env.*
+!.env.example
+*.pem
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

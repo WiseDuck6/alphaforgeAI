@@ -1,0 +1,36 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Logs",
+      "Effect": "Allow",
+      "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+      "Resource": "arn:aws:logs:REGION:ACCOUNT_ID:log-group:/aws/lambda/alphaforge-tools:*"
+    },
+    {
+      "Sid": "ReadProfiles",
+      "Effect": "Allow",
+      "Action": "dynamodb:GetItem",
+      "Resource": "arn:aws:dynamodb:REGION:ACCOUNT_ID:table/alphaforge-profiles"
+    },
+    {
+      "Sid": "AgentSessions",
+      "Effect": "Allow",
+      "Action": ["dynamodb:GetItem", "dynamodb:UpdateItem"],
+      "Resource": "arn:aws:dynamodb:REGION:ACCOUNT_ID:table/alphaforge-agent_sessions"
+    },
+    {
+      "Sid": "CuratedData",
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::alphaforge-data-ACCOUNT_ID/curated/*"
+    },
+    {
+      "Sid": "CuratedDataMissingKeys",
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::alphaforge-data-ACCOUNT_ID",
+      "Condition": {"StringLike": {"s3:prefix": "curated/*"}}
+    }
+  ]
+}

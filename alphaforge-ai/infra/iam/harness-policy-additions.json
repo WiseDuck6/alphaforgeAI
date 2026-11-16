@@ -1,0 +1,18 @@
+{
+  "_comment": "Merge these statements into the sample harness execution role policy from https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-security.html, then remove what the harness does not use. Replace MODEL_ARNS with the inference profile ARN and the foundation-model ARNs it routes to. Delete this _comment key before use.",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "InvokeAdvisorModel",
+      "Effect": "Allow",
+      "Action": ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"],
+      "Resource": ["MODEL_ARNS"]
+    },
+    {
+      "Sid": "CallAlphaForgeTools",
+      "Effect": "Allow",
+      "Action": "bedrock-agentcore:InvokeGateway",
+      "Resource": "arn:aws:bedrock-agentcore:REGION:ACCOUNT_ID:gateway/GATEWAY_ID"
+    }
+  ]
+}

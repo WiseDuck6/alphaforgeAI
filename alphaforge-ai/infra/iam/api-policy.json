@@ -1,0 +1,67 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Logs",
+      "Effect": "Allow",
+      "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+      "Resource": "arn:aws:logs:REGION:ACCOUNT_ID:log-group:/aws/lambda/alphaforge-api:*"
+    },
+    {
+      "Sid": "Tables",
+      "Effect": "Allow",
+      "Action": ["dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem", "dynamodb:Scan"],
+      "Resource": [
+        "arn:aws:dynamodb:REGION:ACCOUNT_ID:table/alphaforge-profiles",
+        "arn:aws:dynamodb:REGION:ACCOUNT_ID:table/alphaforge-sources",
+        "arn:aws:dynamodb:REGION:ACCOUNT_ID:table/alphaforge-agent_traces",
+        "arn:aws:dynamodb:REGION:ACCOUNT_ID:table/alphaforge-agent_sessions",
+        "arn:aws:dynamodb:REGION:ACCOUNT_ID:table/alphaforge-ask_jobs"
+      ]
+    },
+    {
+      "Sid": "CuratedData",
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::alphaforge-data-ACCOUNT_ID/curated/*"
+    },
+    {
+      "Sid": "CuratedDataMissingKeys",
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::alphaforge-data-ACCOUNT_ID",
+      "Condition": {"StringLike": {"s3:prefix": "curated/*"}}
+    },
+    {
+      "Sid": "AsyncAskJobs",
+      "Effect": "Allow",
+      "Action": "lambda:InvokeFunction",
+      "Resource": "arn:aws:lambda:REGION:ACCOUNT_ID:function:alphaforge-api"
+    },
+    {
+      "Sid": "AdvisorAgent",
+      "Effect": "Allow",
+      "Action": ["bedrock-agentcore:InvokeHarness", "bedrock-agentcore:InvokeAgentRuntime"],
+      "Resource": "arn:aws:bedrock-agentcore:REGION:ACCOUNT_ID:*"
+    },
+    {
+      "Sid": "Guardrail",
+      "Effect": "Allow",
+      "Action": "bedrock:ApplyGuardrail",
+      "Resource": "arn:aws:bedrock:REGION:ACCOUNT_ID:guardrail/*"
+    },
+    {
+      "Sid": "MonitoringFrequency",
+      "Effect": "Allow",
+      "Action": ["scheduler:GetSchedule", "scheduler:UpdateSchedule"],
+      "Resource": "arn:aws:scheduler:REGION:ACCOUNT_ID:schedule/alphaforge-ingest/alphaforge-ingest-*"
+    },
+    {
+      "Sid": "PassSchedulerTargetRole",
+      "Effect": "Allow",
+      "Action": "iam:PassRole",
+      "Resource": "arn:aws:iam::ACCOUNT_ID:role/alphaforge-scheduler-role",
+      "Condition": {"StringEquals": {"iam:PassedToService": "scheduler.amazonaws.com"}}
+    }
+  ]
+}

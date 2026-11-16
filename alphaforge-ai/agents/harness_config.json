@@ -1,0 +1,25 @@
+{
+  "_comment": "Input for: aws bedrock-agentcore-control create-harness --cli-input-json file://harness_config.json. Replace every <...>. systemPrompt text must equal agents/system_prompt.md (scripts/render_harness_config.py fills it in). Field names follow the CreateHarness API; check its reference if the CLI rejects a field: https://docs.aws.amazon.com/bedrock-agentcore-control/latest/APIReference/API_CreateHarness.html",
+  "harnessName": "alphaforge_advisor",
+  "executionRoleArn": "arn:aws:iam::<account-id>:role/alphaforge-harness-role",
+  "model": {
+    "bedrockModelConfig": {
+      "modelId": "<inference-profile-id-of-a-Claude-model, from: aws bedrock list-inference-profiles>",
+      "maxTokens": 3072,
+      "temperature": 0.2
+    }
+  },
+  "systemPrompt": [{"text": "<contents of agents/system_prompt.md>"}],
+  "tools": [
+    {
+      "type": "agentcore_gateway",
+      "name": "alphaforge-gateway",
+      "config": {"agentCoreGateway": {"gatewayArn": "arn:aws:bedrock-agentcore:<region>:<account-id>:gateway/<gateway-id>"}}
+    }
+  ],
+  "allowedTools": ["@alphaforge-gateway"],
+  "memory": {"disabled": {}},
+  "maxIterations": 16,
+  "maxTokens": 8192,
+  "timeoutSeconds": 120
+}
